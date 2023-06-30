@@ -1,0 +1,88 @@
+import numpy as np
+import sys
+
+i = 2
+dealer_total = 0
+total = 0
+
+def score_change(x):
+    if "A" in x:
+        return 11
+    elif "J" in x or "Q" in x or "K" in x or "10" in x:
+        return 10
+    else:
+        x = x[1:]
+        x = int(x)
+        return x
+
+CARD = ["SA","S2","S3","S4","S5","S6","S7","S8","S9","S10","SJ","SQ","SK",
+        "CA","C2","C3","C4","C5","C6","C7","C8","C9","C10","CJ","CQ","CK",
+        "HA","H2","H3","H4","H5","H6","H7","H8","H9","H10","HJ","HQ","HK",
+        "DA","D2","D3","D4","D5","D6","D7","D8","D9","D10","DJ","DQ","DK"]
+
+cards = np.random.choice(CARD,[2,26],False)
+
+print("DEALER :",cards[0][0])
+for j in range(2):
+    print(cards[1][j])
+
+while True:
+    sousa = input()
+    if sousa == "hit":
+        print(cards[1][i])
+    elif sousa == "stand":
+        print("-------------")
+        break
+    else:
+        print("put in 'hit' or 'stand'")
+    i = i + 1
+
+
+
+player_hand = []
+player_hand_score = []
+dealer_hand = []
+dealer_hand_score = []
+
+
+
+"PLAYER"
+
+for j in range(i):
+    player_hand.append(cards[1][j])
+    player_hand_score.append(score_change(cards[1][j]))
+
+total = sum(player_hand_score)
+
+if total > 21:
+    print("Bust")
+    sys.exit()
+elif total == 21:
+    print("BLACK JACK!!!!!  YOU WIN!!!!!")
+    sys.exit()
+else:
+    print("PLAYER :",player_hand,total)
+
+i = 0
+
+while True:
+    dealer_hand.append(cards[0][i])
+    dealer_hand_score.append(score_change(cards[0][i]))
+    dealer_total = sum(dealer_hand_score)
+    if 17 < dealer_total < 21 :
+        break
+    elif dealer_total >21:
+        print("DEALER :",dealer_hand,dealer_total)
+        print("YOU WIN")
+        sys.exit()
+    else:
+        i = i + 1
+
+print("DEALER :",dealer_hand,dealer_total)
+
+if dealer_total < total:
+    print("YOU WIN")
+    sys.exit()
+elif dealer_total > total:
+    print("YOU LOSE")
+    sys.exit()
